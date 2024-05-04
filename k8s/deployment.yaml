@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: next-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: next
+  template:
+    metadata:
+      labels:
+        app: next
+    spec:
+      containers:
+        - name: next
+          image: next-webshop:0.1
+          imagePullPolicy: Never
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: next-srv
+spec:
+  selector:
+    app: next
+  ports:
+    - name: next
+      protocol: TCP
+      port: 3001
+      targetPort: 3001

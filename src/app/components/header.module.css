@@ -1,0 +1,53 @@
+.nav {
+  display: flex;
+  color: black;
+  justify-content: center;
+  list-style: none;
+  gap: 30px;
+}
+
+.heading {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.link {
+  padding: 10px;
+}
+
+.topLink:hover {
+  .dropdownMenu {
+    display: block;
+  }
+
+  .link {
+    border-bottom: 3px solid black;
+  }
+}
+
+.dropdownMenu {
+  top: 44px;
+  z-index: 1;
+  left: 15px;
+  display: none;
+  background-color: white;
+  position: absolute;
+  text-align: left;
+  border: 1px solid black;
+}
+
+.topLink {
+  position: relative;
+  padding: 10px;
+}
+
+.bottomListItem {
+  margin: 10px;
+  padding: 0 25px;
+}
+
+.bottomLink {
+  &:hover {
+    color: rgb(67, 66, 66);
+  }
+}
