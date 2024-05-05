@@ -1,0 +1,26 @@
+.name {
+  padding: 10px 0 5px 0;
+  font-size: 14px;
+  color: #24272a;
+  font-family: var(--font-lato);
+}
+
+.price {
+  font-family: var(--font-lato);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.hoverImage {
+    display: none;
+}
+
+.tile:hover {
+  .mainImage {
+    display: none;
+  }
+
+  .hoverImage {
+    display: block;
+  }
+}

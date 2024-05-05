@@ -1,0 +1,11 @@
+.container {
+    display: flex;
+    justify-content: left;
+    max-width: 1366px;
+    margin: 0 auto;
+    padding-top: 60px;
+}
+
+.productDetails {
+    flex: 0 0 350px
+}

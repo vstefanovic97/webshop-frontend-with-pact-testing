@@ -29,14 +29,14 @@ export async function Header() {
         <ul className={styles.nav}>
           {headerCategories.map(({ id, path, name, subCategories }) => (
             <li key={id} className={styles.topLink}>
-              <Link className={styles.link} href={`${path}/${id}`}>
+              <Link className={styles.link} href={`/plp/${path}/${id}`}>
                 {name}
               </Link>
 
               <ul className={styles.dropdownMenu}>
                 {subCategories.map(({ id, name, path }) => (
                   <li className={styles.bottomListItem} key={id}>
-                    <Link className={styles.bottomLink} href={`${path}/${id}`}>
+                    <Link className={styles.bottomLink} href={`/plp/${path}/${id}`}>
                       {name}
                     </Link>
                   </li>

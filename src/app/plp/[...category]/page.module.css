@@ -1,0 +1,30 @@
+.container {
+  padding-top: 60px;
+  margin: 0 auto;
+  max-width: 1366px;
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  grid-template-rows: 60px 1fr;
+
+  grid-template-areas:
+    '.       heading'
+    'filter   productList';
+}
+
+.heading {
+  grid-area: heading;
+  text-transform: capitalize;
+}
+
+.filter {
+  grid-area: filter;
+  padding: 0 20px;
+}
+
+.productList {
+  grid-area: productList;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: 30px;
+  column-gap: 20px;
+}
