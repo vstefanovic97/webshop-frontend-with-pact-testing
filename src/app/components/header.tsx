@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import styles from './header.module.css';
+import { axiosInstance } from '@/axios';
 
 interface Category {
   id: number;
@@ -8,19 +9,14 @@ interface Category {
   subCategories: Category[];
 }
 
-async function getData(): Promise<Category[]> {
-  const res = await fetch('https://web-shop.dev/api/browse/category/header');
+export async function getHeader(): Promise<Category[]> {
+  const response = await axiosInstance.get<Category[]>('api/browse/category/header')
 
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error('Failed to fetch data');
-  }
-
-  return res.json();
+  return response.data;
 }
 
 export async function Header() {
-  const headerCategories = await getData();
+  const headerCategories = await getHeader();
 
   return (
     <header>
