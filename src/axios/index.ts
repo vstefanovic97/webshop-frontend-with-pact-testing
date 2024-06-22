@@ -6,3 +6,12 @@ export const axiosInstance = axios.create({
     Accept: 'application/json',
   },
 });
+
+axiosInstance.interceptors.request.use(
+  config => {
+    if (typeof window !== 'undefined') {
+      config.headers['X-Auth'] = localStorage.getItem('auth-token');
+    }
+    return config;
+  }
+);

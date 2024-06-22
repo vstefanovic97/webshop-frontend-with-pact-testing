@@ -6,6 +6,10 @@
   gap: 30px;
 }
 
+.container {
+  position: relative;
+}
+
 .heading {
   text-align: center;
   padding: 20px 0;
@@ -50,4 +54,10 @@
   &:hover {
     color: rgb(67, 66, 66);
   }
+}
+
+.account-link {
+  position: absolute;
+  top: 20px;
+  right: 40px;
 }
