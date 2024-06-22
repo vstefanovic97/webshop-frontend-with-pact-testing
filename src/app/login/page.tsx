@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { axiosInstance } from '@/axios';
 import { useRouter } from 'next/navigation';
-
+import { useSearchParams } from 'next/navigation';
 import styles from './page.module.css';
 
 type AuthResponse = {
@@ -31,6 +31,9 @@ export default function LoginPage() {
     formState: { errors },
   } = useForm<LoginFormData>();
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const newAccount = searchParams.get('newAccount');
 
   const onSubmit = handleSubmit(async (data) => {
     const token = await login(data);
@@ -40,6 +43,11 @@ export default function LoginPage() {
 
   return (
     <div className={styles.container}>
+      {newAccount && (
+        <div className={styles.accountCreated}>
+          Account created Successfuly!
+        </div>
+      )}
       <h3 className={styles.header}>SIGN IN</h3>
       <form onSubmit={onSubmit}>
         <input
@@ -59,7 +67,10 @@ export default function LoginPage() {
       </form>
 
       <p className={styles.noAccountText}>
-        Don&apos;t have an account yet? Register <Link className={styles.registerLink} href="/register">here</Link>
+        Don&apos;t have an account yet? Register{' '}
+        <Link className={styles.registerLink} href="/register">
+          here
+        </Link>
       </p>
     </div>
   );

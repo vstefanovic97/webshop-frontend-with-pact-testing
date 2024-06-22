@@ -1,6 +1,6 @@
 .container {
   padding-top: 60px;
-  width: 450px;
+  width: 550px;
   margin: 0 auto;
 }
 
@@ -15,6 +15,10 @@
   margin: 10px 0;
 }
 
+.nameGroup {
+    display: flex;
+    gap: 10px;
+}
 .btn {
   color: white;
   background-color: black;
@@ -37,7 +41,14 @@
   text-decoration: underline;
 }
 
-.accountCreated {
-  color: rgb(17, 170, 17);
-  padding-bottom: 10px;
+.password {
+  margin-top: 40px;
+}
+
+.alreadyHaveAccount {
+  padding-top: 10px;
+}
+
+.signIn {
+  text-decoration: underline;
 }
