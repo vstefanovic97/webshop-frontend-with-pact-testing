@@ -4,11 +4,11 @@ import { createAccount } from '@/app/register/page';
 import { resolve } from 'node:path';
 import { axiosInstance } from '@/axios';
 
-const { eachLike, integer, like } = MatchersV3;
+const { like } = MatchersV3;
 
 const provider = new PactV3({
   dir: resolve(process.cwd(), 'pacts'),
-  consumer: 'webshop-fronend',
+  consumer: 'webshop-frontend',
   provider: 'account-service',
 });
 

@@ -8,7 +8,7 @@ const { eachLike, integer, like } = MatchersV3;
 
 const provider = new PactV3({
   dir: resolve(process.cwd(), 'pacts'),
-  consumer: 'webshop-fronend',
+  consumer: 'webshop-frontend',
   provider: 'product-service',
 });
 
