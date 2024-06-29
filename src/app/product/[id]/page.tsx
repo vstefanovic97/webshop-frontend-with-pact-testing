@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { axiosInstance } from '@/axios';
 import ImageShowCase from './components/ImageShowcase';
 import ProductDetails from './components/ProductDetails';
 import styles from './page.module.css';
@@ -13,15 +14,12 @@ export interface Product {
   inventory: boolean;
 }
 
-async function getProduct(id: string): Promise<Product> {
-  const res = await fetch(`https://web-shop.dev/api/browse/products/${id}`);
+export async function getProduct(id: string | number): Promise<Product> {
+  const response = await axiosInstance.get<Product>(
+    `api/browse/products/${id}`
+  );
 
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error('Failed to fetch data');
-  }
-
-  return res.json();
+  return response.data;
 }
 
 export default async function ProductPage({

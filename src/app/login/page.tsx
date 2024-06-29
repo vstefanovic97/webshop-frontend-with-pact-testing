@@ -16,7 +16,7 @@ type LoginFormData = {
   password: string;
 };
 
-async function login(loginForm: LoginFormData): Promise<string> {
+export async function login(loginForm: LoginFormData): Promise<string> {
   const result = await axiosInstance.post<AuthResponse>(
     'api/auth/login',
     loginForm

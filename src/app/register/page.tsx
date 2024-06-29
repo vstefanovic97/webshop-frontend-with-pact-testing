@@ -14,10 +14,10 @@ type LoginFormData = {
   confirmPassword: string;
   firstName: string;
   lastName: string;
-  phoneNumber: string;
+  phoneNumber: number;
 };
 
-async function createAccount(loginForm: LoginFormData): Promise<void> {
+export async function createAccount(loginForm: LoginFormData): Promise<void> {
   const { confirmPassword, ...body } = loginForm;
   await axiosInstance.post<void[]>('api/account/register', body);
 }
