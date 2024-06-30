@@ -48,7 +48,7 @@ describe('GET /account/register', () => {
         body: expectedRequest,
       })
       .willRespondWith({
-        status: 200,
+        status: 201,
         headers: { 'Content-Type': 'application/json' },
         body: expectedSuccessResponse,
       });
