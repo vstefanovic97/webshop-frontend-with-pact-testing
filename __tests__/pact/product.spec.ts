@@ -12,25 +12,31 @@ const provider = new PactV3({
   provider: 'product-service',
 });
 
-const expectedResponse = like({
+const expectedSuccessResponse = like({
   id: integer(1),
   name: like('Refined Rubber Hat'),
   color: like('indigo'),
   description: like(
     'The Apollotech B340 is an affordable wireless mouse with reliable connectivity, 12 months battery life and modern design'
   ),
-  imageUrls: eachLike(
-    'https://s7d2.scene7.com/is/image/aeo/1305_9826_001_of?$pdp-md-opt$'
-  ),
+  imageUrls: like([
+    'https://s7d2.scene7.com/is/image/aeo/1305_9826_001_of?$pdp-md-opt$',
+  ]),
   price: like('399.00'),
   inventory: like(true),
+});
+
+const expectedNotFoundResponse = like({
+  message: 'No Product found for the given id',
+  error: 'Not Found',
+  statusCode: 404,
 });
 
 describe('GET /products/id', () => {
   it('returns an HTTP 200 and a products details', () => {
     provider
-      .given('I have a product')
-      .uponReceiving('a request for that particular product')
+      .given('a product with id 1 exists')
+      .uponReceiving('a request for product with id 1')
       .withRequest({
         method: 'GET',
         path: '/api/browse/products/1',
@@ -39,7 +45,7 @@ describe('GET /products/id', () => {
       .willRespondWith({
         status: 200,
         headers: { 'Content-Type': 'application/json' },
-        body: expectedResponse,
+        body: expectedSuccessResponse,
       });
 
     return provider.executeTest(async (mockserver) => {
@@ -56,6 +62,28 @@ describe('GET /products/id', () => {
       product.imageUrls.forEach((imageUrl) => {
         expect(imageUrl).toBeTypeOf('string');
       });
+    });
+  });
+
+  it('returns an HTTP 404 with product not found error', () => {
+    provider
+      .given('a product with id 1 does not exist')
+      .uponReceiving('a request for product with id 1')
+      .withRequest({
+        method: 'GET',
+        path: '/api/browse/products/1',
+        headers: { Accept: 'application/json' },
+      })
+      .willRespondWith({
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+        body: expectedNotFoundResponse,
+      });
+
+    return provider.executeTest(async (mockserver) => {
+      axiosInstance.defaults.baseURL = mockserver.url;
+
+      await expect(getProduct(1)).rejects.toThrowError();
     });
   });
 });

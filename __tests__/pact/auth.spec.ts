@@ -17,17 +17,22 @@ const expectedRequest = like({
   password: like('test1234$$A'),
 });
 
-const expectedResponse = like({
+const expectedSuccessResponse = like({
   access_token: like(
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImZvb2JhckBnbWFpbC5jb20iLCJpYXQiOjE3MTk2NTk0MDMsImV4cCI6MTcxOTY2MzAwM30.DCj-b_pfChGwgCf2erEKOdLWeDoMeKfc_3CFLVJTx8k'
   ),
 });
 
+const expectedUnauthorizedResponse = {
+  "message": "Unauthorized",
+  "statusCode": 401
+};
+
 describe('GET /auth/login', () => {
   it('returns an HTTP 200 and returns an auth token', () => {
     provider
-      .given('a user is not logged in')
-      .uponReceiving('a request to log in')
+      .given('a user with foobar@gmail.com:test1234$$A exists')
+      .uponReceiving('a request to log in user foobar@gmail.com:test1234$$A')
       .withRequest({
         method: 'POST',
         path: '/api/auth/login',
@@ -35,9 +40,9 @@ describe('GET /auth/login', () => {
         body: expectedRequest,
       })
       .willRespondWith({
-        status: 200,
+        status: 201,
         headers: { 'Content-Type': 'application/json' },
-        body: expectedResponse,
+        body: expectedSuccessResponse,
       });
 
     return provider.executeTest(async (mockserver) => {
@@ -48,6 +53,32 @@ describe('GET /auth/login', () => {
       });
 
       expect(accessToken).toBeTypeOf('string')
+    });
+  });
+
+  it('returns an HTTP 401 Unathorized error', () => {
+    provider
+      .given('a user with foobar@gmail.com:test1234$$A does not exist')
+      .uponReceiving('a request to log in user foobar@gmail.com:test1234$$A')
+      .withRequest({
+        method: 'POST',
+        path: '/api/auth/login',
+        headers: { Accept: 'application/json' },
+        body: expectedRequest,
+      })
+      .willRespondWith({
+        status: 401,
+        headers: { 'Content-Type': 'application/json' },
+        body: expectedUnauthorizedResponse,
+      });
+
+    return provider.executeTest(async (mockserver) => {
+      axiosInstance.defaults.baseURL = mockserver.url;
+
+      await expect(login({
+        email: 'foobar@gmail.com',
+        password: 'test1234$$A',
+      })).rejects.toThrowError();
     });
   });
 });

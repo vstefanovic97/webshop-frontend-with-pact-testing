@@ -20,7 +20,7 @@ const expectedRequest = like({
   phoneNumber: like(123456780),
 });
 
-const expectedResponse = like({
+const expectedSuccessResponse = like({
   id: like(1),
   email: like('foobar@gmail.com'),
   firstName: like('Vuk'),
@@ -28,11 +28,19 @@ const expectedResponse = like({
   phoneNumber: like(123456780),
 });
 
+const expectedUserAlreadyExistsResponse = {
+  message: 'User already exists',
+  error: 'Bad Request',
+  statusCode: 400,
+};
+
 describe('GET /account/register', () => {
   it('returns an HTTP 200 and creates a new account', () => {
     provider
-      .given("I don't have an account")
-      .uponReceiving('a request for creating a new account')
+      .given("an account with email foobar@gmail.com doesn't exist")
+      .uponReceiving(
+        'a request for creating an account with foobar@gmail.com email'
+      )
       .withRequest({
         method: 'POST',
         path: '/api/account/register',
@@ -42,7 +50,7 @@ describe('GET /account/register', () => {
       .willRespondWith({
         status: 200,
         headers: { 'Content-Type': 'application/json' },
-        body: expectedResponse,
+        body: expectedSuccessResponse,
       });
 
     return provider.executeTest(async (mockserver) => {
@@ -55,6 +63,39 @@ describe('GET /account/register', () => {
         lastName: 'Stefanovic',
         phoneNumber: 123456780,
       });
+    });
+  });
+
+  it('returns an HTTP 400 user already exists error', () => {
+    provider
+      .given('an account with email foobar@gmail.com already exists')
+      .uponReceiving(
+        'a request for creating an account with foobar@gmail.com email'
+      )
+      .withRequest({
+        method: 'POST',
+        path: '/api/account/register',
+        headers: { Accept: 'application/json' },
+        body: expectedRequest,
+      })
+      .willRespondWith({
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+        body: expectedUserAlreadyExistsResponse,
+      });
+
+    return provider.executeTest(async (mockserver) => {
+      axiosInstance.defaults.baseURL = mockserver.url;
+      await expect(
+        createAccount({
+          email: 'foobar@gmail.com',
+          password: 'test1234$$A',
+          confirmPassword: 'test1234$$A',
+          firstName: 'Vuk',
+          lastName: 'Stefanovic',
+          phoneNumber: 123456780,
+        })
+      ).rejects.toThrowError();
     });
   });
 });
